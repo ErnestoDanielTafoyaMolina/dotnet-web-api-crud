@@ -8,7 +8,7 @@
       @ViewBag.Accion
    </div>
    <div class="card-body">
-       <a  class="btn btn-primary" asp-action="Usuario" asp-controller="Home" asp-route-idUsuario="0">Nuevo Usuario</a>
+       <a  class="btn btn-success" asp-action="Usuario" asp-controller="Home" asp-route-idUsuario="0">Nuevo Usuario</a>
        <hr />
 
         <table class="table bg-dark text-white text-center">
@@ -20,6 +20,7 @@
                     <th>Email</th>
                     <th>Número Telefónico</th>
                     <th>Lugar de nacimiento</th>
+                    <th>Acciones</th>
                 </tr>
            </thead>
            <tbody>
@@ -32,6 +33,10 @@
                         <td>Email</td>
                         <td>Número Telefónico</td>
                         <td>Lugar de nacimiento</td>
+                        <td>
+                            <a asp-action="Usuario" asp-controller="Home" asp-route-idUsuario="@usuario.Id" class="btn btn-primary btn-sm">Editar</a>
+                            <a asp-action="Eliminar" asp-controller="Home" asp-route-id="@usuario.Id" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
                     </tr>
                 }
             </tbody>

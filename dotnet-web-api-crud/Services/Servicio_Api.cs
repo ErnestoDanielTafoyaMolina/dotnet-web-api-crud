@@ -1,6 +1,5 @@
 ﻿using dotnet_web_api_crud.Models;
 using Newtonsoft.Json;
-using System.Net.Http.Headers;
 using System.Text;
 
 namespace dotnet_web_api_crud.Services
@@ -23,15 +22,18 @@ namespace dotnet_web_api_crud.Services
 
             cliente.BaseAddress = new Uri(_baseurl);
 
+            var response = await cliente.GetAsync("/");
 
-            var response = await cliente.GetAsync("/Aplicantes");
+            Console.WriteLine("Respuesta: " + response);
+            Console.WriteLine("BaseUrl: " + _baseurl);
+
             if (response.IsSuccessStatusCode)
             {
                 var json_respuesta = await response.Content.ReadAsStringAsync();
 
-                var resultado = JsonConvert.DeserializeObject<UserModel>(json_respuesta);
+                var resultado = JsonConvert.DeserializeObject<List<UserModel>>(json_respuesta);
 
-                Usuarios.Add(resultado);
+                Usuarios = resultado;
             }
 
             return Usuarios;
@@ -43,7 +45,7 @@ namespace dotnet_web_api_crud.Services
             var cliente = new HttpClient();
             cliente.BaseAddress = new Uri(_baseurl);
 
-            var response = await cliente.GetAsync($"/Aplicantes/{idUsuario}");
+            var response = await cliente.GetAsync($"/{idUsuario}");
             if (response.IsSuccessStatusCode)
             {
                 var json_respuesta = await response.Content.ReadAsStringAsync();
@@ -67,7 +69,7 @@ namespace dotnet_web_api_crud.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-            var response = await cliente.PostAsync("/Aplicantes", content);
+            var response = await cliente.PostAsync("/", content);
             if (response.IsSuccessStatusCode)
             {
                 respuesta = true;
@@ -85,7 +87,7 @@ namespace dotnet_web_api_crud.Services
 
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-            var response = await cliente.PutAsync("/Aplicantes", content);
+            var response = await cliente.PutAsync("/", content);
             if (response.IsSuccessStatusCode)
             {
                 respuesta = true;
@@ -103,7 +105,7 @@ namespace dotnet_web_api_crud.Services
 
          
 
-            var response = await cliente.DeleteAsync($"/Aplicantes/{id}");
+            var response = await cliente.DeleteAsync($"/{id}");
             if (response.IsSuccessStatusCode)
             {
                 respuesta = true;
