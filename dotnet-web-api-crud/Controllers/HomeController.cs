@@ -8,57 +8,77 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+using dotnet_web_api_crud.Services;
+
 namespace dotnet_web_api_crud.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IServicio_API _servicio_api;
 
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+
+        public HomeController(IServicio_API servicio_API)
         {
-            _logger = logger;
-            _httpClientFactory = httpClientFactory;
+            _servicio_api = servicio_API;
         }
 
         public async Task<IActionResult> Index()
         {
-            try
+            List<UserModel> Usuarios = await _servicio_api.Lista();
+            return View(Usuarios);
+        }
+
+        public async Task<IActionResult> Usuario(int idUsuario)
+        {
+            UserModel Usuario = new UserModel();
+
+            ViewBag.Accion = "Nuevo Usuario";
+
+            if (idUsuario != 0)
             {
-                // URL de la API externa
-                string apiUrl = "https://api-aspirantesweb.igrtecapi.site/api/Aspirantes";
-
-                var client = _httpClientFactory.CreateClient();
-
-                // Realiza la solicitud GET a la API externa
-                var response = await client.GetAsync(apiUrl);
-
-                // Si la solicitud fue exitosa
-                if (response.IsSuccessStatusCode)
-                {
-                    // Leer el contenido de la respuesta como una cadena JSON
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    // Deserializa el contenido JSON en una lista de objetos UserModel
-                    var usuarios = JsonSerializer.Deserialize<List<UserModel>>(content);
-
-                    // Pasar la lista de usuarios a la vista para mostrarla
-                    Console.WriteLine("Usuarios: ", content);
-                    return View(usuarios);
-                }
-                else
-                {
-                    //si la solicitud no fue exitosa
-                    return View("Error");
-                }
+                Usuario = await _servicio_api.Obtener(idUsuario);
+                ViewBag.Accion = "Editar Usuario";
             }
-            catch (Exception ex)
+            return View(Usuario);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GuardarCambios(UserModel ob_usuario)
+        {
+            bool respuesta;
+            if (ob_usuario.Id == 0) {
+                respuesta = await _servicio_api.Guardar(ob_usuario);
+            }
+            else {
+                respuesta = await _servicio_api.Editar(ob_usuario);
+            }
+
+            if (respuesta)
             {
-                // Si ocurre una excepción durante la solicitud se da feedack
-                _logger.LogError(ex, "Error al realizar la solicitud a la API externa");
-                return View("Error");
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NoContent();
+            }
+
+        }
+
+        [HttpGet] 
+        public async Task<IActionResult> Eliminar(int id)
+        {
+            var respuesta = await _servicio_api.Delete(id);
+            if (respuesta)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NoContent();
             }
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

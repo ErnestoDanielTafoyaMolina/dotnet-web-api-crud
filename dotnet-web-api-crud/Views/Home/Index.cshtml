@@ -1,33 +1,40 @@
-﻿@model List<dotnet_web_api_crud.Models.UserModel> 
+﻿@model List<UserModel>
 
 @{
     ViewData["Title"] = "Home Page";
 }
-<div>
-    <h2>Lista de Usuarios</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo Electrónico</th>
-                <th>Número Telefónico</th>
-                <th>Lugar de Nacimiento</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var usuario in Model)
-            {
+<div class="card">
+   <div class="card-header">
+      @ViewBag.Accion
+   </div>
+   <div class="card-body">
+       <a  class="btn btn-primary" asp-action="Usuario" asp-controller="Home" asp-route-idUsuario="0">Nuevo Usuario</a>
+       <hr />
+
+        <table class="table bg-dark text-white text-center">
+            <thead class="text-center">
                 <tr>
-                    <td>@usuario.Id</td>
-                    <td>@usuario.Nombre</td>
-                    <td>@usuario.Apellido</td>
-                    <td>@usuario.CorreoElectronico</td>
-                    <td>@usuario.NumTelefonico</td>
-                    <td>@usuario.LugarNacimiento</td>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Número Telefónico</th>
+                    <th>Lugar de nacimiento</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+           </thead>
+           <tbody>
+                @foreach(var usuario in Model)
+                {
+                    <tr>
+                        <td>#</td>
+                        <td>Nombre</td>
+                        <td>Apellido</td>
+                        <td>Email</td>
+                        <td>Número Telefónico</td>
+                        <td>Lugar de nacimiento</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+   </div>
 </div>

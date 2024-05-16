@@ -1,7 +1,13 @@
+using dotnet_web_api_crud.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+//aqui aplique la inyección de dependencias
+builder.Services.AddScoped<IServicio_API, Servicio_Api>();
 
 // Add HttpClientFactory to the services container
 builder.Services.AddHttpClient();
