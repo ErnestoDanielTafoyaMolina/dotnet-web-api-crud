@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace dotnet_web_api_crud.Controllers
@@ -23,7 +25,7 @@ namespace dotnet_web_api_crud.Controllers
         {
             try
             {
-                // URL de la API externa que deseas consumir
+                // URL de la API externa
                 string apiUrl = "https://api-aspirantesweb.igrtecapi.site/api/Aspirantes";
 
                 var client = _httpClientFactory.CreateClient();
@@ -34,23 +36,25 @@ namespace dotnet_web_api_crud.Controllers
                 // Si la solicitud fue exitosa
                 if (response.IsSuccessStatusCode)
                 {
-                    // Lee el contenido de la respuesta como una lista de usuarios
-                    var usuarios = await response.Content.ReadAsAsync<List<UserModel>>();
+                    // Leer el contenido de la respuesta como una cadena JSON
+                    var content = await response.Content.ReadAsStringAsync();
 
-                    // Puedes pasar la lista de usuarios a la vista para mostrarla
+                    // Deserializa el contenido JSON en una lista de objetos UserModel
+                    var usuarios = JsonSerializer.Deserialize<List<UserModel>>(content);
+
+                    // Pasar la lista de usuarios a la vista para mostrarla
+                    Console.WriteLine("Usuarios: ", content);
                     return View(usuarios);
                 }
                 else
                 {
-                    // Si la solicitud no fue exitosa, maneja el error adecuadamente
-                    // Aquí puedes redirigir a una vista de error o hacer cualquier otra acción
+                    //si la solicitud no fue exitosa
                     return View("Error");
                 }
             }
             catch (Exception ex)
             {
-                // Si ocurre una excepción durante la solicitud, maneja el error adecuadamente
-                // Por ejemplo, puedes registrar el error y redirigir a una vista de error
+                // Si ocurre una excepción durante la solicitud se da feedack
                 _logger.LogError(ex, "Error al realizar la solicitud a la API externa");
                 return View("Error");
             }
