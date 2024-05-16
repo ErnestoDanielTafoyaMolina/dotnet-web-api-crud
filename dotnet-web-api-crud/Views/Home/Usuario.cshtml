@@ -1,8 +1,40 @@
-﻿
+﻿@model dotnet_web_api_crud.Models.UserModel
 @{
     ViewData["Title"] = "Usuario";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Usuario</h1>
-
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">
+            @ViewBag.Accion
+        </h2>
+    </div>
+    <div class="card-body">
+        <form asp-action="GuardarCambios" asp-controller="Home" method="post">
+            <input asp-for="Id" type="hidden" />
+            <div class="mb-2">
+                <label class="form-label">Nombre</label>
+                <input asp-for="Nombre" class="form-control form-control-sm" required />
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Apellido</label>
+                <input asp-for="Apellido" class="form-control form-control-sm" required />
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Correo electrónico</label>
+                <input asp-for="CorreoElectronico" class="form-control form-control-sm" required />
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Número de teléfono</label>
+                <input asp-for="NumTelefonico" class="form-control form-control-sm" required />
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Lugar de nacimiento</label>
+                <input asp-for="LugarNacimiento" class="form-control form-control-sm" required />
+            </div>
+            <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+            <a asp-action="Index" asp-controller="Home" class="btn btn-warning btn-sm" >Volver a la lista</a>
+        </form>
+    </div>
+</div>

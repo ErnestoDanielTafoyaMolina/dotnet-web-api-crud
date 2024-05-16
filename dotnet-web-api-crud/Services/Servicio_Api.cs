@@ -6,12 +6,12 @@ namespace dotnet_web_api_crud.Services
 {
     public class Servicio_Api:IServicio_API
     {
-        private static string _baseurl;
+        private static string _baseUrl;
 
         public Servicio_Api()
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-            _baseurl = builder.GetSection("ApiSettings:baseUrl").Value;
+            _baseUrl = builder.GetSection("ApiSettings:baseUrl").Value;
         }
 
         public async Task<List<UserModel>> Lista()
@@ -20,12 +20,12 @@ namespace dotnet_web_api_crud.Services
 
             var cliente = new HttpClient();
 
-            cliente.BaseAddress = new Uri(_baseurl);
+            cliente.BaseAddress = new Uri(_baseUrl);
 
-            var response = await cliente.GetAsync("/");
+            var response = await cliente.GetAsync("/api/Aspirantes");
 
             Console.WriteLine("Respuesta: " + response);
-            Console.WriteLine("BaseUrl: " + _baseurl);
+            Console.WriteLine("BaseUrl: " + _baseUrl);
 
             if (response.IsSuccessStatusCode)
             {
@@ -43,9 +43,9 @@ namespace dotnet_web_api_crud.Services
             UserModel Usuario = new UserModel();
 
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri(_baseurl);
+            cliente.BaseAddress = new Uri(_baseUrl);
 
-            var response = await cliente.GetAsync($"/{idUsuario}");
+            var response = await cliente.GetAsync($"/api/Aspirantes/{idUsuario}");
             if (response.IsSuccessStatusCode)
             {
                 var json_respuesta = await response.Content.ReadAsStringAsync();
@@ -65,11 +65,11 @@ namespace dotnet_web_api_crud.Services
             bool respuesta = false;
 
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri(_baseurl);
+            cliente.BaseAddress = new Uri(_baseUrl);
 
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-            var response = await cliente.PostAsync("/", content);
+            var response = await cliente.PostAsync("/api/Aspirantes", content);
             if (response.IsSuccessStatusCode)
             {
                 respuesta = true;
@@ -83,11 +83,11 @@ namespace dotnet_web_api_crud.Services
             bool respuesta = false;
 
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri(_baseurl);
+            cliente.BaseAddress = new Uri(_baseUrl);
 
             var content = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-            var response = await cliente.PutAsync("/", content);
+            var response = await cliente.PutAsync("/api/Aspirantes", content);
             if (response.IsSuccessStatusCode)
             {
                 respuesta = true;
@@ -101,11 +101,11 @@ namespace dotnet_web_api_crud.Services
             bool respuesta = false;
 
             var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri(_baseurl);
+            cliente.BaseAddress = new Uri(_baseUrl);
 
          
 
-            var response = await cliente.DeleteAsync($"/{id}");
+            var response = await cliente.DeleteAsync($"/api/Aspirantes/{id}");
             if (response.IsSuccessStatusCode)
             {
                 respuesta = true;
